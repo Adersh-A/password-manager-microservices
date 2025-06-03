@@ -5,7 +5,7 @@ const HomePage = () => {
   const [username, setUsername] = useState("");
   const [services, setServices] = useState([]);
   const [adding, setAdding] = useState(false);
-  const [newService, setNewService] = useState({ service: "", password: "" });
+  const [newService, setNewService] = useState({ serviceName: "",userName: "", password: "" });
   const navigate = useNavigate();
 
   const logoutAndRedirect = () => {
@@ -16,6 +16,7 @@ const HomePage = () => {
 
   const fetchWithAuth = async (url, options = {}) => {
     const jwt = localStorage.getItem("jwt");
+    console.log("final url ::"+url)
     const res = await fetch(url, {
       ...options,
       headers: {
@@ -44,7 +45,7 @@ const HomePage = () => {
 
     setUsername(name || "User");
 
-    fetchWithAuth("http://localhost:8081/api/services")
+    fetchWithAuth("http://localhost:8081/api/passwords",{})
       .then((res) => res.json())
       .then(setServices)
       .catch((err) => console.error("Error fetching services", err));
@@ -56,14 +57,14 @@ const HomePage = () => {
   };
 
   const handleSave = async () => {
-    const { service, password } = newService;
-    if (!service || !password) {
-      alert("Please fill in both fields");
+    const { serviceName,userName, password } = newService;
+    if (!serviceName || !userName || !password) {
+      alert("Please fill in all fields");
       return;
     }
 
     try {
-      const res = await fetchWithAuth("/api/services", {
+      const res = await fetchWithAuth("http://localhost:8081/api/passwords", {
         method: "POST",
         body: JSON.stringify(newService),
       });
@@ -105,6 +106,7 @@ const HomePage = () => {
           <thead>
             <tr>
               <th className="border-b p-2">Service Name</th>
+              <th className="border-b p-2">User ID</th>
               <th className="border-b p-2">Password</th>
             </tr>
           </thead>
@@ -112,6 +114,7 @@ const HomePage = () => {
             {services.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="border-b p-2">{item.serviceName}</td>
+                <td className="border-b p-2">{item.userName}</td>
                 <td className="border-b p-2">{item.password}</td>
               </tr>
             ))}
@@ -129,12 +132,21 @@ const HomePage = () => {
           <div className="mt-4 space-y-4 max-w-md">
             <input
               type="text"
-              name="service"
-              value={newService.service}
+              name="serviceName"
+              value={newService.serviceName}
               onChange={handleChange}
               placeholder="Service Name"
               className="w-full p-2 border rounded"
               aria-label="Service Name"
+            />
+            <input
+              type="text"
+              name="userName"
+              value={newService.userName}
+              onChange={handleChange}
+              placeholder="User Name"
+              className="w-full p-2 border rounded"
+              aria-label="User Name"
             />
             <input
               type="password"
@@ -155,7 +167,7 @@ const HomePage = () => {
               <button
                 onClick={() => {
                   setAdding(false);
-                  setNewService({ service: "", password: "" });
+                  setNewService({ serviceName: "", userName: "", password: "" });
                 }}
                 className="bg-gray-300 px-4 py-2 rounded-xl hover:bg-gray-400 transition"
               >

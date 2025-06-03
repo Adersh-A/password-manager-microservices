@@ -24,10 +24,9 @@ public class AuthController {
     public ResponseEntity<?> authenticate(@RequestBody GoogleAuthRequest request) throws Exception {
         try {
             JWTClaimsSet claims = googleTokenVerifier.verify(request.getIdToken());
-            String email = claims.getSubject();
+            String email = (String) claims.getClaim("email");
             String name = (String) claims.getClaim("name");
-            String jwt = jwtService.generateToken(email, name);
-            System.out.println("jwt generated "+jwt);
+            String jwt = jwtService.generateToken(email);
             return ResponseEntity.ok(AuthResponse.builder().userName(name).jwt(jwt).build());
         } catch (Exception e) {
             return ResponseEntity.status(401).body(AuthResponse.builder().userName("Unauthorized").jwt(null).build());
