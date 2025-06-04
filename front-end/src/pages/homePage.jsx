@@ -45,7 +45,7 @@ const HomePage = () => {
 
     setUsername(name || "User");
 
-    fetchWithAuth("http://localhost:8081/api/passwords",{})
+    fetchWithAuth("http://localhost:8080/api/v1/passwords",{})
       .then((res) => res.json())
       .then(setServices)
       .catch((err) => console.error("Error fetching services", err));
@@ -64,7 +64,7 @@ const HomePage = () => {
     }
 
     try {
-      const res = await fetchWithAuth("http://localhost:8081/api/passwords", {
+      const res = await fetchWithAuth("http://localhost:8080/api/v1/passwords", {
         method: "POST",
         body: JSON.stringify(newService),
       });

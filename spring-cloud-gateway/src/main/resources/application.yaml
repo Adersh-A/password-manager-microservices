@@ -1,0 +1,6 @@
+cors:
+  allowed-origins: http://localhost:5173
+
+services:
+  auth-service-url: http://localhost:8081
+  password-service-url: http://localhost:8082

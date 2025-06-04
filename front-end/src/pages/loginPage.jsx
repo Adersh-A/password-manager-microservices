@@ -22,7 +22,7 @@ const LoginPage = () => {
     const idToken = response.credential;
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/google", {
+      const res = await fetch("http://localhost:8080/api/v1/authservice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idToken }),

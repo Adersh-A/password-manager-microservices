@@ -19,7 +19,6 @@ public class AuthController {
     private final JwtService jwtService;
     private final GoogleTokenVerifier googleTokenVerifier;
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/google")
     public ResponseEntity<?> authenticate(@RequestBody GoogleAuthRequest request) throws Exception {
         try {
